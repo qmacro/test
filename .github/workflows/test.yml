@@ -12,6 +12,8 @@ jobs:
       uses: qmacro/action-add-issue-to-project-column@releases/v1
       with:
         myToken: ${{ secrets.GITHUB_TOKEN }}
+        project: 'project1'
+        column: 'Submitted'
     
     - name: Show some output
       run: echo "The output from the previous step in 'projects' is '${{ steps.list.outputs.projects }}'"
