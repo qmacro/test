@@ -11,7 +11,7 @@ jobs:
       id: list
       uses: qmacro/action-add-issue-to-project-column@releases/v1
       with:
-        myToken: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         project: 'project1'
         column: 'Submitted'
     
