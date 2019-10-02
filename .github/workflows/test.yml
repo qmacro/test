@@ -1,0 +1,17 @@
+on:
+  issues:
+    types: opened
+
+jobs:
+  list_projects:
+    runs-on: ubuntu-latest
+    name: List projects related to a repo
+    steps:
+    - name: List projects step
+      id: list
+      uses: qmacro/action-add-issue-to-project-column@releases/v1
+      with:
+        repo: 'test'
+    # Use the output from the `hello` step
+    - name: Get the output time
+      run: echo "The output from the previous step in 'projects' is '${{ steps.list.outputs.projects }}'"
