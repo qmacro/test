@@ -5,15 +5,12 @@ on:
 jobs:
   list_projects:
     runs-on: ubuntu-latest
-    name: List projects related to a repo
+    name: Assign new issue to project
     steps:
-    - name: List projects step
+    - name: Create new project card with issue
       id: list
       uses: qmacro/action-add-issue-to-project-column@releases/v1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         project: 'project1'
         column: 'Submitted'
-    
-    - name: Show some output
-      run: echo "The output from the previous step in 'projects' is '${{ steps.list.outputs.projects }}'"
