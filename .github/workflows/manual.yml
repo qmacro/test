@@ -29,8 +29,5 @@ jobs:
         name: Check out repository
       - name: Shows first few lines of README
         run: head README.md
-        
-        
-    # Runs a single command using the runners shell
-    - name: Send greeting
-      run: echo "Hello ${{ github.event.inputs.name }}"
+      - name: Send greeting
+        run: echo "Hello ${{ github.event.inputs.name }}"
