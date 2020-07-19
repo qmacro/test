@@ -27,7 +27,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: Check out repository
+        
       - name: Shows first few lines of README
         run: head README.md
+        
       - name: Send greeting
         run: echo "Hello ${{ github.event.inputs.name }}"
+      
+      - name: Append line
+        run: |
+          echo "- `date`" >> README.md
+          git diff
+          git add README.md
+          git commit -m 'add new date entry' || exit 0
+          git push
+        
+      
+      
