@@ -34,6 +34,11 @@ jobs:
       - name: Send greeting
         run: echo "Hello ${{ github.event.inputs.name }}"
       
+      - name: Set up git
+        run: |
+          git config --global user.email "qmacro-bot@example.com"
+          git config --global user.name "qmacro bot"
+        
       - name: Append line
         run: |
           echo "- `date`" >> README.md
