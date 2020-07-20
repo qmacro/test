@@ -20,7 +20,8 @@ jobs:
         run: echo "- `date`" >> README.md
     
       - name: Check for changes (fails if no changes)
-        run: ! git diff --quiet
+        run: |
+          ! git diff --quiet
         
       - name: Commit change
         if: ${{ success() }}
