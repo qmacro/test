@@ -6,43 +6,36 @@ name: Manual workflow
 # or API.
 on:
   workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "greet"
-  greet:
+  job1:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - uses: actions/checkout@v2
-        name: Check out repository
+      - name: Check out repo
+        uses: actions/checkout@v2
         
-      - name: Shows first few lines of README
+      - name: Show first few lines of README
         run: head README.md
         
       - name: Send greeting
-        run: echo "Hello ${{ github.event.inputs.name }}"
+        run: echo "Hello world"
       
-      - name: Set up git
+      - name: Append line to README.md
+        run: echo "- `date`" >> README.md
+    
+      - name: Check for changes (fails if no changes)
+        run: ! git diff --quiet
+        
+      - name: Commit change
+        if: ${{ success() }}
         run: |
           git config --global user.email "qmacro-bot@example.com"
           git config --global user.name "qmacro bot"
-        
-      - name: Append line
-        run: |
-          echo "- `date`" >> README.md
-          git diff
           git add README.md
           git commit -m 'add new date entry' || exit 0
           git push
