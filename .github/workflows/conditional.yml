@@ -1,0 +1,20 @@
+name: Conditional test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Send greeting
+        run: echo "Hello"
+      
+      - name: Create non-successful exit code
+        run: false
+      
+      - name: Conditional
+        if: ${{ success() }}
+        run: echo Successful
