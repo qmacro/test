@@ -9,11 +9,11 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+        
       - name: Send greeting
-        run: echo "Hello"
-      
-      - name: Create non-successful exit code
-        run: false
+        run: ./fail.bash
       
       - name: Conditional
         if: ${{ success() }}
