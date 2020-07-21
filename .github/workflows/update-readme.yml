@@ -16,12 +16,10 @@ jobs:
       - name: Send greeting
         run: echo "Hello world"
     
-      - name: Check for changes (fails if no changes)
-        run: |
-          ! git diff --quiet
+      - name: Append line to README
+        run: echo "- $(date)" >> README.md
         
       - name: Commit change
-        if: ${{ success() }}
         run: |
           git config --global user.email "qmacro-bot@example.com"
           git config --global user.name "qmacro bot"
