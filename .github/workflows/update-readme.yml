@@ -3,7 +3,7 @@ name: Update README test
 on:
   workflow_dispatch:
   schedule:
-    - cron: '* * * * *'
+    - cron: '*/5 * * * *'
 jobs:
   job1:
     runs-on: self-hosted
