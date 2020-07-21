@@ -2,12 +2,11 @@ name: Update README test
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: '* * * * *'
 jobs:
   job1:
     runs-on: self-hosted
-    schedule:
-    - cron:  '* * * * *'
-
     steps:
       - name: Check out repo
         uses: actions/checkout@v2
