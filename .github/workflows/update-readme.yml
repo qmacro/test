@@ -5,6 +5,8 @@ on:
 jobs:
   job1:
     runs-on: self-hosted
+    schedule:
+    - cron:  '* * * * *'
 
     steps:
       - name: Check out repo
