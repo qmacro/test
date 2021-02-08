@@ -1,9 +1,8 @@
 name: Build .abapgit.xml file
-on:
-  workflow_dispatch:
+on: [workflow_dispatch, push]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
     - name: Check out this repository
       uses: actions/checkout@v2
@@ -18,4 +17,6 @@ jobs:
            <STARTING_FOLDER>/abap/src/</STARTING_FOLDER>
            <FOLDER_LOGIC>PREFIX</FOLDER_LOGIC>
            <IGNORE>
+           $(date)
+           </IGNORE>
         EOF
