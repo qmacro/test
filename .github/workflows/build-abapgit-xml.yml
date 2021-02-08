@@ -20,7 +20,7 @@ jobs:
            <STARTING_FOLDER>/abap/src/</STARTING_FOLDER>
            <FOLDER_LOGIC>PREFIX</FOLDER_LOGIC>
            <IGNORE>
-           "$items"
+       $items
            </IGNORE>
           </DATA>
          </asx:values>
