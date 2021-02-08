@@ -8,7 +8,10 @@ jobs:
       uses: actions/checkout@v2
     - name: Create .abapgit.xml contents
       run: |
-        cat <<EOF
+        items=$(ls -1Ap \
+          | grep -vE '(\.abapgit.xml|\.git\/)$' \
+          | sed 's,^,    <item>/,; s,$,</item>,' \
+        ) && cat <<EOF
         <?xml version="1.0" encoding="utf-8"?>
         <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
          <asx:values>
@@ -17,6 +20,9 @@ jobs:
            <STARTING_FOLDER>/abap/src/</STARTING_FOLDER>
            <FOLDER_LOGIC>PREFIX</FOLDER_LOGIC>
            <IGNORE>
-           $(date)
+           "$items"
            </IGNORE>
+          </DATA>
+         </asx:values>
+        </asx:abap>
         EOF
