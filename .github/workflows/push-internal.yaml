@@ -1,11 +1,4 @@
-#######################################################################
-### This workflow pushes changes back to an internal mirror of this ###
-### repository, when changes are pushed to the main branch.         ###
-### This workflow must be run from within the source repo.          ###
-#######################################################################
-
-
-name: push-internal
+name: Merge
 
 on:
   workflow_dispatch:
@@ -13,40 +6,76 @@ on:
     branches:
       - master
 
+
 jobs:
-  push:
-    if: contains(github.repositoryUrl, 'github.com')
-    name: Push changes to remote (internal) repository
+  merge-remotes:
+    name: Merge latest changes
     runs-on: ubuntu-latest
     env:
+      # Git configuration needed for git commits
       GIT_USER_NAME: github-actions
-      GIT_USER_EMAIL: github-action@sap.com
-      INT_REPO_TOKEN: ${{ secrets.INT_PAT }}
-      INT_REPO_HOST: github.tools.sap
-      INT_OWNER_REPO: coDoc/test
-      INT_REMOTE_NAME: internal
-      BRANCH: master
+      GIT_USER_EMAIL: github-actions@sap.com
+
+      # Environment variables for the source repository
+      # These can be set using the workflow context since the source repo will be the same as
+      # where the workflow is run from.
+      SOURCE_OWNER_REPO: ${{ github.repository }}
+      SOURCE_REPO_NAME: ${{ github.event.repository.name }}
+      SOURCE_REPO_BRANCH: master
+      SOURCE_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      SOURCE_REPO_HOST: github.com
+
+      # Environment variables for the target repo where the changes should be pushed to
+      TARGET_OWNER_REPO: coDoc/test
+      TARGET_REPO_NAME: test
+      TARGET_REPO_BRANCH: master
+      TARGET_REPO_TOKEN: ${{ secrets.INT_PAT }}
+      TARGET_REPO_HOST: github.tools.sap
 
     steps:
-
-      - name: Context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: Checkout repo
-        id: checkout
-        uses: actions/checkout@v2
+      - name: Clone target repository
+        id: clone_target
+        run: |
+          git clone https://x-access-token:${{ env.TARGET_REPO_TOKEN }}@${{ env.TARGET_REPO_HOST }}/${{ env.TARGET_OWNER_REPO }}.git
 
       - name: Add git configuration
-        id: config
+        if: ${{ success() }}
+        id: config_git
+        # Set git config to local to avoid polluting the git config of self-hosted runner
         run: |
           git config --local user.name ${{ env.GIT_USER_NAME }}
           git config --local user.email ${{ env.GIT_USER_EMAIL }}
+        working-directory: ./${{ env.TARGET_REPO_NAME }}
 
-      - name: Push to internal
-        id: push
+      - name: Add source repo as remote and fetch
+        if: ${{ success() }}
+        id: add_remote
         run: |
-          git remote add ${{ env.INT_REMOTE_NAME}} https://x-access-token:${{ env.INT_REPO_TOKEN }}@${{ env.INT_REPO_HOST }}/${{ env.INT_OWNER_REPO }}.git
-          git pull ${{ env.INT_REMOTE_NAME }} ${{ env.BRANCH }} --allow-unrelated-histories
-          git push ${{ env.INT_REMOTE_NAME }} ${{ env.BRANCH }}
+          git remote add \
+            source https://x-access-token:${{ env.SOURCE_REPO_TOKEN }}@${{ env.SOURCE_REPO_HOST }}/${{ env.SOURCE_OWNER_REPO }}.git
+          git fetch --all
+        working-directory: ./${{ env.TARGET_REPO_NAME }}
+
+      - name: Merge source repo/branch onto target
+        if: ${{ success() }}
+        id: merge_source_target
+        run: |
+          git merge \
+            source/${{ env.SOURCE_REPO_BRANCH }} \
+            --allow-unrelated-histories \
+            -X theirs \
+            -m "Merge ..."
+        working-directory: ./${{ env.TARGET_REPO_NAME }}
+
+      - name: Push to origin
+        if: ${{ success() }}
+        id: push_origin
+        run: |
+          git push origin ${{ env.TARGET_REPO_BRANCH }}
+        working-directory: ./${{ env.TARGET_REPO_NAME }}
+
+      - name: Clean up
+        if: ${{ always() }}
+        id: cleanup
+        run: |
+          rm -rf ${{ env.TARGET_REPO_NAME }}
