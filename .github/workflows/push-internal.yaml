@@ -31,11 +31,15 @@ jobs:
         id: checkout
         uses: actions/checkout@v2
 
-      - name: Push to internal
-        id: push
+      - name: Add git configuration
+        id: config
         run: |
           git config --local user.name ${{ env.GIT_USER_NAME }}
           git config --local user.email ${{ env.GIT_USER_EMAIL }}
+
+      - name: Push to internal
+        id: push
+        run: |
           git remote add ${{ env.INT_REMOTE_NAME}} https://x-access-token:${{ env.INT_REPO_TOKEN }}@${{ env.INT_REPO_HOST }}/${{ env.INT_OWNER_REPO }}.git
           git pull ${{ env.INT_REMOTE_NAME }} ${{ env.BRANCH }} --allow-unrelated-histories
           git push ${{ env.INT_REMOTE_NAME }} ${{ env.BRANCH }}
