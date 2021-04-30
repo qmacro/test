@@ -15,6 +15,7 @@ on:
 
 jobs:
   push:
+    if: contains(github.repositoryUrl, 'github.com')
     name: Push changes to remote (internal) repository
     runs-on: ubuntu-latest
     env:
