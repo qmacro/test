@@ -1,4 +1,12 @@
-name: Merge
+#######################################################################
+### This workflow brings changes back to an internal paired repo    ###
+### when changes are pushed to the main branch.                     ###
+###                                                                 ###
+### This workflow can be (and will only) run from within the source ###
+### repository i.e. on github.com.                                  ###
+#######################################################################
+
+name: Sync back to internal
 
 on:
   workflow_dispatch:
@@ -8,24 +16,24 @@ on:
 
 
 jobs:
-  merge-remotes:
-    name: Merge latest changes
+  sync-back:
+
+    # Only run if we're on github.com
+    if: contains(github.repositoryUrl, 'github.com')
+
+    name: Sync back
     runs-on: ubuntu-latest
+
     env:
-      # Git configuration needed for git commits
       GIT_USER_NAME: github-actions
       GIT_USER_EMAIL: github-actions@sap.com
 
-      # Environment variables for the source repository
-      # These can be set using the workflow context since the source repo will be the same as
-      # where the workflow is run from.
       SOURCE_OWNER_REPO: ${{ github.repository }}
       SOURCE_REPO_NAME: ${{ github.event.repository.name }}
       SOURCE_REPO_BRANCH: master
       SOURCE_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       SOURCE_REPO_HOST: github.com
 
-      # Environment variables for the target repo where the changes should be pushed to
       TARGET_OWNER_REPO: coDoc/test
       TARGET_REPO_NAME: test
       TARGET_REPO_BRANCH: master
@@ -33,21 +41,20 @@ jobs:
       TARGET_REPO_HOST: github.tools.sap
 
     steps:
-      - name: Clone target repository
-        id: clone_target
+      - name: Clone internal (target) repository
+        id: clone_internal
         run: |
           git clone https://x-access-token:${{ env.TARGET_REPO_TOKEN }}@${{ env.TARGET_REPO_HOST }}/${{ env.TARGET_OWNER_REPO }}.git
 
       - name: Add git configuration
         if: ${{ success() }}
         id: config_git
-        # Set git config to local to avoid polluting the git config of self-hosted runner
         run: |
           git config --local user.name ${{ env.GIT_USER_NAME }}
           git config --local user.email ${{ env.GIT_USER_EMAIL }}
         working-directory: ./${{ env.TARGET_REPO_NAME }}
 
-      - name: Add source repo as remote and fetch
+      - name: Add external (source) repo as remote and fetch
         if: ${{ success() }}
         id: add_remote
         run: |
@@ -56,7 +63,7 @@ jobs:
           git fetch --all
         working-directory: ./${{ env.TARGET_REPO_NAME }}
 
-      - name: Merge source repo/branch onto target
+      - name: Merge external (source) repo/branch onto internal (target)
         if: ${{ success() }}
         id: merge_source_target
         run: |
@@ -64,10 +71,10 @@ jobs:
             source/${{ env.SOURCE_REPO_BRANCH }} \
             --allow-unrelated-histories \
             -X theirs \
-            -m "Merge ..."
+            -m "External -> Internal sync"
         working-directory: ./${{ env.TARGET_REPO_NAME }}
 
-      - name: Push to origin
+      - name: Push to origin (internal target)
         if: ${{ success() }}
         id: push_origin
         run: |
