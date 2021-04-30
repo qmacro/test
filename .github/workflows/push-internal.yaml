@@ -18,6 +18,8 @@ jobs:
     name: Push changes to remote (internal) repository
     runs-on: ubuntu-latest
     env:
+      GIT_USER_NAME: github-actions
+      GIT_USER_EMAIL: github-action@sap.com
       INT_REPO_TOKEN: ${{ secrets.INT_PAT }}
       INT_REPO_HOST: github.tools.sap
       INT_OWNER_REPO: coDoc/test
