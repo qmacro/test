@@ -1,8 +1,10 @@
-#  the docs readme
+# The Docs Readme
+
 Testing ground
 
 - list
 - another item
-a sentence immediately following the list.
 
-### Another title one heading too deep
+A sentence immediately following the list.
+
+## Another Title
