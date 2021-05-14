@@ -11,4 +11,4 @@ jobs:
           --no-save \
           markdownlint-cli markdownlint-rule-titlecase
     - run: |
-        npx markdownlint --rules markdownlint-rule-titlecase docs/
+        npx markdownlint docs/ --rules markdownlint-rule-titlecase
