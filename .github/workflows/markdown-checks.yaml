@@ -1,0 +1,15 @@
+name: Markdown checks
+on:
+  workflow_dispatch:
+jobs:
+  main:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - run: |
+        npm install \
+          --no-package-lock \
+          --no-save \
+          markdownlint-cli markdownlint-rule-titlecase
+    - run: |
+        npx markdownlint docs/ --rules markdownlint-rule-titlecase
