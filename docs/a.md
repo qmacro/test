@@ -1,4 +1,4 @@
-# some thing
+# Some Thing
 
 sfsdf
 
