@@ -15,7 +15,7 @@ jobs:
 
     - run: tree -d
 
-    - run: "echo ::add-matcher::.qmacro/workflows/markdownlint-problem-matcher.json"
+    - run: "echo ::add-matcher::.qmacro/workflows/markdownlint/problem-matcher.json"
 
     - run: |
         npm install \
@@ -23,4 +23,10 @@ jobs:
           --no-save \
           markdownlint-cli markdownlint-rule-titlecase
 
-    - run: npx markdownlint docs/ --rules markdownlint-rule-titlecase
+    - run: tree -d
+
+    - run: |
+        npx markdownlint \
+          --config .qmacro/workflows/markdownlint/config.yaml \
+          --rules markdownlint-rule-titlecase \
+          docs/
