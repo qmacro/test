@@ -1,6 +1,5 @@
 name: Markdown checks
-on:
-  workflow_dispatch:
+on: [workflow_dispatch, push]
 jobs:
   main:
     runs-on: ubuntu-20.04
