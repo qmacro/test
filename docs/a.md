@@ -1,8 +1,9 @@
-##   some thing
+# some thing
+
 sfsdf
 
-#### something else
+## Something Else
 
 - one
--  two
+- two
 
