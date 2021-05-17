@@ -51,6 +51,6 @@ jobs:
           DOCS_LOC: "/${{ github.repository }}/tree/${{ github.base_ref }}/docs"
           DISALLOWED_FILES: ${{ steps.check_files_changed.outputs.disallowed_files }}
         run: |
-          printf "Hi there. It looks like you've included some files in this pull request that we can't accept in a contribution. Only actual documentation content, which is managed in the [docs]($DOCS_LOC) directory, is open for contribution.\n\nThe disallowed files that you submitted are:\n\n$DISALLOWED_FILES" \
+          printf "🚨 Hi there. It looks like you've included some files in this pull request that we can't accept in a contribution. Only actual documentation content, which is managed in the [docs]($DOCS_LOC) directory, is open for contribution.\n\nThe disallowed files that you submitted are:\n\n$DISALLOWED_FILES.\n\nYou'll need to revert all of the files you changed in that list using [GitHub Desktop](https://docs.github.com/en/free-pro-team@latest/desktop/contributing-and-collaborating-using-github-desktop/reverting-a-commit) or ``git checkout origin/main <file name>``. Once you get those files reverted, we can continue with the review process." \
           | gh pr comment ${{ github.event.pull_request.number }} --body-file -
           exit 1
