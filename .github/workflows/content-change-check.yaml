@@ -1,4 +1,21 @@
-name: Check for disallowed content
+name: Disallowed content checker
+
+# What the execution context is:
+# A pull request on the main branch.
+
+# What it does:
+# Checks to see if there are any files included in the pull request
+# that we cannot accept. Only files in the docs/ directory are open
+# to contribution.
+
+# Why we need it:
+# So the repository remains stable and we can focus on documentation
+# contributions.
+
+# What's important to know:
+# The filter used in the check_files_changed step is a negated one,
+# i.e. notice the use of the '!'. Read the filter like this: "The
+# disallowed files are any that DON'T match docs/**".
 
 on:
   pull_request:
@@ -8,11 +25,6 @@ jobs:
   main:
     runs-on: ubuntu-20.04
     steps:
-
-      - id: a
-        env:
-          GITHUBCONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUBCONTEXT"
 
       - id: check_files_changed
         name: Checks if disallowed content has been changed
@@ -39,6 +51,6 @@ jobs:
           DOCS_LOC: "/${{ github.repository }}/tree/${{ github.base_ref }}/docs"
           DISALLOWED_FILES: ${{ steps.check_files_changed.outputs.disallowed_files }}
         run: |
-          printf "Hi there. It looks like you've modified some files in this repository that we can't accept in a contribution. Only actual documentation content, which is managed in the [docs]($DOCS_LOC) directory, is open for contribution.\n\nThe disallowed files that you submitted are:\n\n$DISALLOWED_FILES" \
+          printf "Hi there. It looks like you've included some files in this pull request that we can't accept in a contribution. Only actual documentation content, which is managed in the [docs]($DOCS_LOC) directory, is open for contribution.\n\nThe disallowed files that you submitted are:\n\n$DISALLOWED_FILES" \
           | gh pr comment ${{ github.event.pull_request.number }} --body-file -
           exit 1
