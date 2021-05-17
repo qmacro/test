@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
 
-      - id: check_disallowed_content
+      - id: check_files_changed
         name: Checks if disallowed content has been changed
         uses: dorny/paths-filter@v2
         with:
@@ -18,9 +18,13 @@ jobs:
             docs:
               - 'docs/**'
 
-      - id: subsequent
-        run: |
-          echo Result is ...
-          echo ${{ steps.check_disallowed_content.output.docs }}
-          echo "docs count: $docs_count"
-          echo "files changed: $docs_files"
+      - id: x
+        run: echo ${{ steps.check_files_changed.outputs.docs_files }}
+
+      - id: a
+        if: steps.check_files_changed.outputs.docs == 'true'
+        run: echo "docs file(s) changed"
+
+      - id: b
+        if: steps.check_files_changed.outputs.docs == 'false'
+        run: echo "docs files(s) NOT changed"
