@@ -1,0 +1,26 @@
+name: Check for disallowed content
+
+on:
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  main:
+    runs-on: ubuntu-20.04
+    steps:
+
+      - id: check_disallowed_content
+        name: Checks if disallowed content has been changed
+        uses: dorny/paths-filter@v2
+        with:
+          list-files: shell
+          filters: |
+            docs:
+              - 'docs/**'
+
+      - id: subsequent
+        run: |
+          echo Result is ...
+          echo steps.check_disallowed_content.output.docs
+          echo "docs count: $docs_count"
+          echo "files changed: $docs_files"
