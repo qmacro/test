@@ -16,15 +16,15 @@ jobs:
           list-files: shell
           filters: |
             docs:
-              - 'docs/**'
+              - '!docs/**'
 
       - id: x
         run: echo ${{ steps.check_files_changed.outputs.docs_files }}
 
       - id: a
         if: steps.check_files_changed.outputs.docs == 'true'
-        run: echo "docs file(s) changed"
+        run: echo "file(s) changed"
 
       - id: b
         if: steps.check_files_changed.outputs.docs == 'false'
-        run: echo "docs files(s) NOT changed"
+        run: echo "files(s) NOT changed"
