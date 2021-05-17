@@ -11,7 +11,7 @@ jobs:
 
     - uses: actions/checkout@v2
 
-    - run: "echo ::add-matcher::.qmacro/workflows/markdownlint/problem-matcher.json"
+    - run: "echo ::add-matcher::.github/workflows/markdownlint/problem-matcher.json"
 
     - run: |
         npm install \
@@ -21,6 +21,6 @@ jobs:
 
     - run: |
         npx markdownlint \
-          --config .qmacro/workflows/markdownlint/config.yaml \
+          --config .github/workflows/markdownlint/config.yaml \
           --rules markdownlint-rule-titlecase \
           docs/
