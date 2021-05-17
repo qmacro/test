@@ -13,6 +13,7 @@ jobs:
         name: Checks if disallowed content has been changed
         uses: dorny/paths-filter@v2
         with:
+          list_files: 'csv'
           filters: |
             disallowed:
               - '.github/**'
@@ -24,7 +25,9 @@ jobs:
 
       - id: a
         if: steps.check_files_changed.outputs.disallowed == 'true'
-        run: echo "disallowed file(s) changed"
+        run: |
+          echo "disallowed file(s) changed"
+          echo "files: ${{ steps.check_files_changed.outputs.disallowed_files }}"
 
       - id: b
         if: steps.check_files_changed.outputs.docs == 'false'
