@@ -36,8 +36,9 @@ jobs:
       - id: comment_on_disallowed
         if: steps.check_files_changed.outputs.disallowed == 'true'
         env:
+          DOCS_LOC: "/${{ github.repository }}/tree/${{ github.base_ref }}/docs"
           DISALLOWED_FILES: ${{ steps.check_files_changed.outputs.disallowed_files }}
         run: |
-          printf "Hi there. It looks like you've modified some files in this repository that we can't accept in a contribution. Only actual documentation content, which is managed in the docs directory, is open for contribution.\n\nThe disallowed files that you submitted are:\n\n$DISALLOWED_FILES" \
+          printf "Hi there. It looks like you've modified some files in this repository that we can't accept in a contribution. Only actual documentation content, which is managed in the [docs]($DOCS_LOC) directory, is open for contribution.\n\nThe disallowed files that you submitted are:\n\n$DISALLOWED_FILES" \
           | gh pr comment ${{ github.event.pull_request.number }} --body-file -
           exit 1
