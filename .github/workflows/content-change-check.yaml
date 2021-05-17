@@ -13,7 +13,7 @@ jobs:
         name: Checks if disallowed content has been changed
         uses: dorny/paths-filter@v2
         with:
-          list-files: 'csv'
+          list-files: 'shell'
           filters: |
             disallowed:
               - '!docs/**'
