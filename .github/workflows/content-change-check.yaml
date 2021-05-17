@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
 
+      - id: a
+        env:
+          GITHUBCONTEXT: ${{ toJSON(github) }}
+        run: echo "$GITHUBCONTEXT"
+
       - id: check_files_changed
         name: Checks if disallowed content has been changed
         uses: dorny/paths-filter@v2
