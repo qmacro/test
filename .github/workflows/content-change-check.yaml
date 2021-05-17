@@ -31,4 +31,4 @@ jobs:
         if: steps.check_files_changed.outputs.disallowed == 'true'
         run: |
           printf "Hi there. It looks like you've modified some files in this repository that we can't accept in a contribution. Only actual documentation content, which is managed in the `docs/` directory, is open for contribution.\n\nThe disallowed files that you submitted are:\n\n${{ steps.check_files_changed.output.disallowed_files }}." \
-          | gh pr comment github.event.pull_request.number }} --body-file -
+          | gh pr comment ${{ github.event.pull_request.number }} --body-file -
