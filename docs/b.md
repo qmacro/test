@@ -1,12 +1,11 @@
-## Some Thing
+# Some Thing
 
 sfsdf
 
-### Something Else
-- one
--  one and a half
-- two
+## Something Else
 
-Here's a (reversed)[https://qmacro.org] link.
+- one
+- one and a half
+- two
 
 another line
