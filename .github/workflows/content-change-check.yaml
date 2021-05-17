@@ -21,6 +21,6 @@ jobs:
       - id: subsequent
         run: |
           echo Result is ...
-          echo steps.check_disallowed_content.output.docs
+          echo ${{ steps.check_disallowed_content.output.docs }}
           echo "docs count: $docs_count"
           echo "files changed: $docs_files"
