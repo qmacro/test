@@ -40,3 +40,8 @@ jobs:
           filters: |
             disallowed:
               - '!docs/**'
+
+      - id: output
+        env:
+          DISALLOWED_FILES: ${{ steps.check_files_changed.outputs.disallowed_files }}
+        run: echo "$DISALLOWED_FILES"
