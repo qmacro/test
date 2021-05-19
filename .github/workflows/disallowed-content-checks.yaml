@@ -1,7 +1,7 @@
 name: Disallowed content checker
 on:
 pull_request_target:
-  branches: [main]
+  branches: [main, master]
 
 jobs:
   main:
