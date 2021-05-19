@@ -1,0 +1,36 @@
+name: Disallowed content checker
+on:
+pull_request_target:
+  branches: [main]
+
+jobs:
+  main:
+    runs-on: ubuntu-20.04
+    steps:
+
+      - id: checkout
+        name: Check out the repo
+        uses: actions/checkout@v2
+
+      - id: auth_gh
+        name: Authenticate gh to repo
+        run: echo -n ${{ secrets.SAPDOCS_Q_PAT_REPO_READORG }} | gh auth login --with-token
+
+      - id: check_membership
+        name: Check team membership of PR author
+        env:
+          team: 'admin'
+        run: |
+          IFS='/' read -r owner repository <<< "$GITHUB_REPOSITORY"
+          if gh api "/orgs/$owner/teams/${repository}-${team}/memberships/$GITHUB_ACTOR"; then
+            echo "YES $GITHUB_ACTOR IS A MEMBER OF ${repository}-${team}"
+          fi
+
+      - id: check_files_changed
+        name: Checks if disallowed content has been changed
+        uses: dorny/paths-filter@v2
+        with:
+          list-files: 'shell'
+          filters: |
+            disallowed:
+              - '!docs/**'
