@@ -8,6 +8,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
 
+      - id: dump
+        env:
+          CONTEXT: ${{ toJSON(github) }}
+        run: |
+          echo "$CONTEXT"
+
       - id: checkout
         name: Check out the repo
         uses: actions/checkout@v2
