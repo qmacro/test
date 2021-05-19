@@ -37,7 +37,7 @@ jobs:
         uses: dorny/paths-filter@v2
         with:
           list-files: 'shell'
-          base: ${{ github.head_ref }}
+          ref: ${{ github.head_ref }}
           filters: |
             disallowed:
               - '!docs/**'
