@@ -71,8 +71,10 @@ jobs:
         name: Count how many other issues / pull requests are so labeled
         run: |
           querystring="is:${OBJECTTYPE}+label:${LABEL}+author:${GITHUB_ACTOR}+repo:${GITHUB_REPOSITORY}"
-          result=$(gh api --jq '.total_count' "/search/issues?q=$querystring")
-          echo "OBJECTCOUNT=$result" >> $GITHUB_ENV
+          result=$(gh api --jq '.items[] | [.number, .title] | @tsv' "/search/issues?q=$querystring")
+          echo "$result"
+          echo "OBJECTCOUNT=$(wc -l <<< $result)"
+          echo "OBJECTCOUNT=$(wc -l <<< $result)" >> $GITHUB_ENV
 
       - id: requester
         name: Ask for SAP Community profile URL if label added for first time and no prev labeled issue / pr
