@@ -34,6 +34,10 @@ jobs:
 
     steps:
 
+      - id: dump
+        run: |
+          echo "${{ toJSON(github) }}"
+
       - id: checkout
         name: Check out the repo
         uses: actions/checkout@v2
