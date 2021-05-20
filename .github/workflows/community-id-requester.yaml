@@ -74,7 +74,7 @@ jobs:
       - id: count_previous_labeled_objects
         name: Count how many other issues / pull requests are so labeled
         run: |
-          querystring="is:${OBJECTTYPE}+label:${LABEL}+author:${GITHUB_ACTOR}+repo:${GITHUB_REPOSITORY}"
+          querystring="is:${OBJECTTYPE}+label:${LABEL}+author:${CONTRIBUTOR}+repo:${GITHUB_REPOSITORY}"
           result=$(gh api --jq '.items[] | [.number, .title] | @tsv' "/search/issues?q=$querystring")
           echo "$result"
           echo "OBJECTCOUNT=$(wc -l <<< $result)"
